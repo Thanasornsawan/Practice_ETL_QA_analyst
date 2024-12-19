@@ -1,5 +1,5 @@
 # Practice_ETL_QA_analyst
-This project use Apache Airflow, GitHub action CICD, excel, sql, docker and python
+This project use excel, sql, docker and python (pytest)
 
 # Scenario user story
 Ensure that customer order data is correctly loaded into the database so that I can analyze purchasing patterns.
