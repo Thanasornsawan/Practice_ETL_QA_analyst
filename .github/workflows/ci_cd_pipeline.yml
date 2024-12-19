@@ -4,9 +4,19 @@ on:
   push:
     branches:
       - main
+    # Exclude only README.md from triggering the workflow on push
+    paths-ignore:
+      - 'README.md'
+
   pull_request:
     branches:
       - main
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'docker-compose.yml'
+      - '**/*.py'
+      - '**/*.sql'
 
 jobs:
   build:
@@ -23,26 +33,8 @@ jobs:
 
       - name: Install Docker and Docker Compose
         run: |
-          # Update apt and install dependencies
           sudo apt-get update
-          sudo apt-get install -y \
-            apt-transport-https \
-            ca-certificates \
-            curl \
-            gnupg \
-            lsb-release
-
-          # Add Docker's official GPG key
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-          # Set up the stable repository
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-          # Install Docker and Docker Compose
-          sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-          # Install Docker Compose
+          sudo apt-get install -y docker.io
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
@@ -59,8 +51,13 @@ jobs:
       - name: Run database setup
         run: python sql/sqlite_db/setup_db.py
 
+      - name: Set execute permission for load_data.py
+        run: |
+          chmod +x tests/load_data.py
+
       - name: Load data into database
-        run: tests/load_data.py
+        run: |
+          python tests/load_data.py
 
       - name: Run tests
         run: |
