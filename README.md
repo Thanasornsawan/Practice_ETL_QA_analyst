@@ -79,6 +79,6 @@ pytest tests/test_etl.py
 ```
 
 # Example fail result after run test
-![date result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/date_range.PNG?raw=true)
+![date result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/date_range.png?raw=true)
 
-![date result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/id_mapping.PNG?raw=true)
+![map result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/id_mapping.png?raw=true)
