@@ -30,6 +30,17 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Create virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+
+      - name: Install dependencies
+        run: |
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
       - name: Install Docker and Docker Compose
         run: |
           # Remove any existing containerd or docker packages
@@ -50,13 +61,10 @@ jobs:
           docker-compose -f docker-compose.yml up -d
           sleep 10  # Wait for the DB to start properly (adjust if needed)
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
       - name: Run database setup
-        run: python sql/sqlite_db/setup_db.py
+        run: |
+          source venv/bin/activate
+          python sql/sqlite_db/setup_db.py
 
       - name: Set execute permission for load_data.py
         run: |
@@ -64,10 +72,12 @@ jobs:
 
       - name: Load data into database
         run: |
+          source venv/bin/activate
           python tests/load_data.py
 
       - name: Run tests
         run: |
+          source venv/bin/activate
           pytest tests/test_etl.py
         continue-on-error: true
 
