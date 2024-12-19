@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from openpyxl import load_workbook
+from datetime import datetime
 
 # Path to the SQLite database
 DB_PATH = 'sql/sqlite_db/etl.db'
