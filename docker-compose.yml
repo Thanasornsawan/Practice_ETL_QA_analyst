@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  sqlite_db:
+    build: ./sql  # Path where your Dockerfile is located
+    container_name: sqlite_db
+    volumes:
+      - ./sql/sqlite_db:/opt/sqlite_db  # Map the local folder to the container's folder
+    ports:
+      - "8081:8080"  # Adjust if needed
+    networks:
+      - sqlite_network
+
+networks:
+  sqlite_network:
+    driver: bridge

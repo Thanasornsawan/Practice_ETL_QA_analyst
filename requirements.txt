@@ -1,0 +1,5 @@
+# For setting up the environment
+apache-airflow==2.5.0              # If using Airflow for orchestration
+pandas==1.5.3                     # For handling data manipulation
+pytest==7.2.2                     # For running tests
+openpyxl==3.0.10                  # For reading and writing Excel files (e.g., orders_test_data.xlsx)

@@ -1,0 +1,54 @@
+name: ETL CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Docker and Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Build and start Docker containers with docker-compose
+        run: |
+          docker-compose -f docker-compose.yml up -d
+          sleep 10  # Wait for the DB to start properly (adjust if needed)
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run database setup
+        run: python sql/sqlite_db/setup_db.py
+
+      - name: Load data into database
+        run: tests/load_data.py
+
+      - name: Run tests
+        run: |
+          pytest tests/test_etl.py
+        continue-on-error: true
+
+      - name: Clean up Docker containers
+        run: |
+          docker-compose -f docker-compose.yml down

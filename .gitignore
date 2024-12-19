@@ -1,0 +1,4 @@
+__pycache__
+etl.db
+.venv
+.pytest_cache
