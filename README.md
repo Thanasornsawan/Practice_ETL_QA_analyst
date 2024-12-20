@@ -85,7 +85,7 @@ pytest tests/test_data_unittest.py
 
 ## Data Completeness Testing:
 
-**Objective:** Ensure that all expected data is loaded into the target system without any loss.
+**Objective:** Ensure that all expected data is loaded into the target system without any loss. <br/>
 **Test Case:** Compare the record counts between the source and target tables to verify completeness.
 
 **Run the test**
