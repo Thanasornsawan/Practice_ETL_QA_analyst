@@ -94,3 +94,53 @@ pytest tests/test_load_correct.py
 ```
 ![load result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/test_load.png?raw=true)
 
+# SCD Type 2 testing
+## Proposed Workflow
+**1. Raw Source Database (etl.db)**<br/>
+- Schema: Customer_ID, Customer_Name, Order_Date, Product_ID, Quantity, Email.<br/>
+
+**2. Dimension Database (etl_dm.db)**<br/>
+- Schema: EID (Primary Key), Customer_ID, Customer_Name, Order_Date, Product_ID, Quantity, Email, Start_Date, End_Date, Active.<br/>
+
+**3. Logic in create_dm.py**<br/>
+* Check if data exists in the dimension database:<br/>
+    * **Non-existent Record:** Insert new data with:<br/>
+        * Start_Date = today<br/>
+        * End_Date = 9999-12-31<br/>
+        * Active = Y<br/>
+    * **Existing Record:**<br/>
+        * Compare Product_ID, Quantity, Order_Date:<br/>
+        * If data is different:<br/>
+            * Update the End_Date of the old record to today and set Active = N.<br/>
+            * Insert the updated record as a new row with Start_Date = today and Active = Y.<br/>
+
+**4. Verification in Tests**<br/>
+* Validate SCD Type 2 logic by filtering EID and comparing historical records.<br/>
+* Ensure schema alignment between etl.db and etl_dm.db.<br/>
+
+# Step by step to run test<br/>
+**1.Create dimension database only once (first time)**
+```sh
+python sql/sqlite_db/setup_db.py
+```
+**2. Load data from source db to target dimension db**
+```sh
+python sql/sqlite_db/create_dm.py 
+```
+**The table first time, we can see that it has wrong data from source with duplicate Customer_ID**<br/>
+![table first insert](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/table_first_insert.png?raw=true)
+<br/>
+This file you can run mutltiple times, it will compare source db with target db and check with the same Customer_ID and Order_Id which is primary key from source db to update history data change by put Start_Date, End_Date and Active status
+<br/>
+
+**3. Run SCD test case file**
+```sh
+pytest -s tests/test_scd.py
+```
+![scd step](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/scd_step.png?raw=true)
+<br/>
+Then, we update quantity of customer name "Jane Smith" and run create_dm.py again<br/>
+
+![table update](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/table_update.png?raw=true)
+
+![scd result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/scd_result.png?raw=true)

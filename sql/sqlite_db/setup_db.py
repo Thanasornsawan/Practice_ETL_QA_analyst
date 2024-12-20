@@ -11,7 +11,7 @@ cursor = conn.cursor()
 cursor.execute('DROP TABLE IF EXISTS Orders;')
 cursor.execute('DROP TABLE IF EXISTS Products;')
 
-# Create the Orders table with the updated schema (including Email column)
+# Create the Orders table with the updated schema
 cursor.execute('''
     CREATE TABLE Orders (
         Order_ID INTEGER PRIMARY KEY,
