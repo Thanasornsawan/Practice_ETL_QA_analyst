@@ -19,7 +19,7 @@ Ensure Order_Date is in the correct format (YYYY-MM-DD).<br/>
 Handle missing or invalid values for Quantity (e.g., replace negative values with zero).<br/>
 **Load**: Data is loaded into the Orders table in SQLite
 
-## Test Plan
+## Test Plan for Data Quality Testing (unit test)
 
 | Test Case ID | Test Case Description                                | Steps to Execute                                                                                                                                                    | Expected Result                                                       | Risk Level                       | Test Data                                                                                                                                          |
 |--------------|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -36,9 +36,9 @@ Handle missing or invalid values for Quantity (e.g., replace negative values wit
 ## To run a specific test case:
 **Run by exact function name:**
 ```sh
-pytest -s tests/test_etl.py::test_invalid_product_id
+pytest -s tests/test_data_unittest.py::test_invalid_product_id
 ```
-This will run only the test_invalid_product_id test case in tests/test_etl.py.
+This will run only the test_invalid_product_id test case in tests/test_data_unittest.py.
 
 ## Running the Project Locally
 
@@ -75,10 +75,22 @@ python tests/load_data.py
 
 **6.Run the test**
 ```sh
-pytest tests/test_etl.py
+pytest tests/test_data_unittest.py
 ```
 
 # Example fail result after run test
 ![date result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/date_range.png?raw=true)
 
 ![map result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/id_mapping.png?raw=true)
+
+## Data Completeness Testing:
+
+**Objective:** Ensure that all expected data is loaded into the target system without any loss.
+**Test Case:** Compare the record counts between the source and target tables to verify completeness.
+
+**Run the test**
+```sh
+pytest tests/test_load_correct.py
+```
+![load result](https://github.com/Thanasornsawan/Practice_ETL_QA_analyst/blob/main/photos/test_load.png?raw=true)
+

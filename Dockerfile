@@ -19,4 +19,4 @@ COPY . .
 ENV DB_PATH="/opt/airflow/sqlite_db/etl.db"
 
 # Command to run when the container starts
-CMD ["pytest", "tests/test_etl.py"]
+CMD ["pytest", "tests/test_data_unittest.py"]

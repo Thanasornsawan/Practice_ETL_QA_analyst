@@ -78,7 +78,7 @@ jobs:
       - name: Run tests
         run: |
           source venv/bin/activate
-          pytest tests/test_etl.py
+          pytest tests/test_data_unittest.py
         continue-on-error: true
 
       - name: Clean up Docker containers
